@@ -5,18 +5,25 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
-
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.0
+  # ----- GCP |> -----
   flutter_launcher_icons: ^0.8.1
-
+  firebase_core: ^0.7.0
+  cloud_firestore: ^0.16.0
+  firebase_auth: ^0.20.0+1
+  firebase_storage: ^7.0.0
+  firebase_analytics: ^7.0.1
+  # -------- >| ------
+  google_sign_in: ^4.5.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 flutter_icons:
   android: "launcher_icon"
@@ -24,7 +31,6 @@ flutter_icons:
   image_path: "assets/images/ic_launcher.png"
   adaptive_icon_background: "#212121"
   adaptive_icon_foreground: "assets/images/ic_launcher.png"
-
 
 flutter:
   uses-material-design: true
@@ -44,3 +50,5 @@ flutter:
     - family: NotoSansJP-Regular
       fonts:
         - asset: assets/fonts/NotoSansJP-Regular.otf
+flutter_intl:
+  enabled: true

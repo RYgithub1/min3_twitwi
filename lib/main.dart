@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:min3_twitwi/common/style.dart';
+
+import 'generated/l10n.dart';
 
 
 
@@ -15,6 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,
+
       debugShowCheckedModeBanner: false,
       title: 'TWITWI',
       theme: ThemeData(
@@ -25,6 +36,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: RegularFont
       ),
+
       home: HomeScreen(),
     );
   }
