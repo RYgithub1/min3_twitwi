@@ -1,4 +1,5 @@
 import 'package:min3_twitwi/model/database/database_manager.dart';
+import 'package:min3_twitwi/model/location/location_manager.dart';
 import 'package:min3_twitwi/model/repository/post_repository.dart';
 import 'package:min3_twitwi/model/repository/user_repository.dart';
 import 'package:min3_twitwi/viewmodel/login_view_model.dart';
@@ -20,9 +21,13 @@ List<SingleChildWidget> globalProviders = [
 List<SingleChildWidget> independentModels = [
   Provider<DatabaseManager>(
     create: (_) => DatabaseManager(),
-  )
+  ),
+  Provider<LocationManager>(
+    create: (_) => LocationManager(),
+  ),
 
 ];
+
 
 
 
@@ -30,8 +35,11 @@ List<SingleChildWidget> dependentModels = [
   ProxyProvider<DatabaseManager, UserRepository>(
     update: (_, dbm, repo) => UserRepository(databaseManager: dbm),
   ),
-  ProxyProvider<DatabaseManager, PostRepository>(
-    update: (_, dbm, repo) => PostRepository(databaseManager: dbm),
+  ProxyProvider2<DatabaseManager, LocationManager, PostRepository>(
+    update: (_, dbm, lom, repo) => PostRepository(
+      databaseManager: dbm,
+      locationManager: lom,
+    ),
   ),
 
 ];

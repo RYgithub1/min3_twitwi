@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:min3_twitwi/data/location.dart';
 import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/model/database/database_manager.dart';
+import 'package:min3_twitwi/model/location/location_manager.dart';
 
 
 
 
 class PostRepository {
   final DatabaseManager databaseManager;
-  PostRepository({this.databaseManager});
+  final LocationManager locationManager;
+  PostRepository({this.databaseManager, this.locationManager});
 
 
 
@@ -24,6 +27,12 @@ class PostRepository {
       final camePath = came.path;
       return File(camePath);
     }
+  }
+
+
+
+  Future<Location> getCurrentLocation() async {
+    return await locationManager.getCurrentLocation();
   }
 
 

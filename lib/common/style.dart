@@ -14,3 +14,7 @@ const BoldFont = "NotoSansJP-Bold";
 // Login
 const loginTitleTextStyle = TextStyle(fontFamily: TitleFont, fontSize: 60.0);
 
+
+// Post
+const postCaptionTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 16.0);
+const postLocationTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 20.0);
