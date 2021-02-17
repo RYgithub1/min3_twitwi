@@ -30,5 +30,12 @@ class LocationManager {
   }
 
 
+  Future<Location> updateLocation(double latitude, double longitude) async {
+    final placemarks = await  geo.placemarkFromCoordinates(latitude, longitude);
+    final placemark = placemarks.first;
+    return Future.value(  convert(placemark, latitude, longitude)  );
+  }
+
+
 
 }

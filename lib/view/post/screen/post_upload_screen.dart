@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:min3_twitwi/common/confirm_dialog.dart';
 import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
 import 'package:min3_twitwi/view/post/component/post_caption_part.dart';
@@ -44,7 +45,19 @@ class PostUploadScreen extends StatelessWidget {
                   )
                   : IconButton(
                     icon: Icon(Icons.done),
-                    onPressed: null,
+                    /// [共通ダイアログ: TopLevelFunc: xxx -> showConfirmDialog]
+                    // onPressed: showConfirmDialog(
+                    /// [vsError: setState() or markNeedsBuild()]
+                    onPressed: () => showConfirmDialog(
+                      context: context,
+                      title: S.of(context).post,
+                      content: S.of(context).postConfirm,
+                      onConfirmed: (isConfirmed) {
+                        if (isConfirmed) {
+                          _post(context);   /// [true: Confirmed -> 投稿メソ]
+                        }
+                      },
+                    ),
                   )
             ],
           ),
@@ -77,8 +90,16 @@ class PostUploadScreen extends StatelessWidget {
 
 
   void _cancelPost(BuildContext context) {
+    final postViewModel = Provider.of<PostViewModel>(context, listen: false);
+    postViewModel.cancelPost();
+    Navigator.pop(context);
+  }
 
 
+  /// [投稿]
+  void _post(BuildContext context) async {
+    final postViewModel = Provider.of<PostViewModel>(context, listen: false);
+    await postViewModel.post();
     Navigator.pop(context);
   }
 

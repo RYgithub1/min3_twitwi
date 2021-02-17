@@ -52,6 +52,7 @@ class _PostCaptionInputTextFieldState extends State<PostCaptionInputTextField> {
     final postViewModel = Provider.of<PostViewModel>(context, listen: false);
     /// [input内容 -> viewModelに格納]
     postViewModel.caption = _captionTextEditingController.text;
-    print("comm120: _onCaptionUpdated(): ${postViewModel.caption}");
+    // print("comm120: _onCaptionUpdated(): ${postViewModel.caption}");
+    print("comm120: _onCaptionUpdated()");
   }
 }

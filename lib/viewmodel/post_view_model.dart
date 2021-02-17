@@ -41,19 +41,41 @@ class PostViewModel extends ChangeNotifier {
     locationString = _toLocationString(location);
     print("comm012: pickImage: locationString: $locationString");
 
-
     if (imageFile != null) isImagePicked = true;
     isProcessing = false;
     notifyListeners();
-
-
-
   }
-
 
 
   String _toLocationString(Location location) {
     return location.country + " " + location.state + " " + location.city;
+  }
+
+
+  Future<void> updateLocation(double latitude, double longitude) async {
+    location = await postRepository.updateLocation(latitude, longitude);
+    locationString = _toLocationString(location);
+    notifyListeners();
+  }
+
+
+  /// [投稿データ: Firestoreへ渡す]
+  Future<void> post() async {
+    isProcessing = true;
+    notifyListeners();
+
+    /// [currentUserはstaticにしといた]
+    await postRepository.post(UserRepository.currentUser, imageFile, caption, location, locationString);
+    isImagePicked = false;
+    isProcessing = false;
+    notifyListeners();
+  }
+
+
+  void cancelPost() {
+    isImagePicked = false;
+    isProcessing = false;
+    notifyListeners();
   }
 
 

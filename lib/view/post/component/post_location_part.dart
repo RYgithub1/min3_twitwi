@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:min3_twitwi/common/style.dart';
 import 'package:min3_twitwi/data/location.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
+import 'package:min3_twitwi/view/post/screen/map_screen.dart';
 import 'package:min3_twitwi/viewmodel/post_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ class PostLocationPart extends StatelessWidget {
 
       trailing: IconButton(
         icon: FaIcon(FontAwesomeIcons.mapMarkerAlt),
-        onPressed: null,
+        onPressed: () => _openMapScreen(context, postViewModel.location),    /// [map開く]
       ),
     );
   }
@@ -49,4 +50,17 @@ class PostLocationPart extends StatelessWidget {
       ],
     );
   }
+
+
+
+  _openMapScreen(BuildContext context, Location location) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => MapScreen(
+        location: location,
+      ),
+    ));
+  }
+
+
+
 }
