@@ -66,5 +66,63 @@ class DatabaseManager {
   }
 
 
+  Future<List<Post>> getPostsMineAndFollowings(String userId) async {
+    /// [Firestoreデータ取得: まずデータ有無の判定]
+    final query = await _firestoreDb.collection("posts")
+                                    .get();
+    if (query.docs.length == 0) return List();
+
+    /// [まずuser]
+    /// [自分とフォロー中の2user分必要]
+    var userIds = await getFollowingUserIds(userId);
+    /// [取得したフォロー中userのidに自分を加える]
+    userIds.add(userId);
+
+    /// [次にpost]
+    var results = List<Post>();
+    await _firestoreDb.collection("posts")
+                      .where("userId", whereIn: userIds)
+                      .orderBy("postDateTime", descending: true)   // 投稿並べ順: 新しいもの上位
+                      .get()
+                      .then((value) {   /// [getしたものはList<Snapshot>ゆえ各々] QuerySnapshot
+                        value.docs.forEach((element) {
+                          results.add(Post.fromMap(element.data()));
+                        });
+                      });
+    print("comm180: getPostsMineAndFollowings: results $results");
+    return results;
+  }
+
+
+  Future<List<Post>> getPostsByUser(String userId) {
+    return null;
+
+  }
+
+
+
+
+  Future<List<String>> getFollowingUserIds(String userId) async {
+    final query = await _firestoreDb.collection("users").doc(userId)
+                                    .collection("followings")
+                                    .get();
+    if (query.docs.length > 0 ) return List();
+    /// [データ有: follow中userのidを各々取得]
+    var userIds = List<String>();
+    query.docs.forEach((element) {
+      userIds.add(element.data()["userId"]);
+    });
+    return userIds;
+  }
+
+
+  /// [DB更新]
+  Future<void> updatePost(Post updatePost) async {
+    final reference = await _firestoreDb.collection("posts").doc(updatePost.postId);
+    await reference.update(updatePost.toMap());
+
+  }
+
+
 
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:min3_twitwi/common/style.dart';
 import 'package:min3_twitwi/data/location.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
+import 'package:min3_twitwi/view/common/style.dart';
 import 'package:min3_twitwi/view/post/screen/map_screen.dart';
 import 'package:min3_twitwi/viewmodel/post_view_model.dart';
 import 'package:provider/provider.dart';

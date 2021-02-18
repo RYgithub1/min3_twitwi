@@ -28,7 +28,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _latLng = LatLng(widget.location.latitude, widget.location.longitude);
-    _cameraPosition = CameraPosition(target: _latLng, zoom: 16.0);
+    _cameraPosition = CameraPosition(target: _latLng, zoom: 12.0);
   }
 
   /// [マーカー立てる]

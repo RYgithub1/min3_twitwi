@@ -63,8 +63,21 @@ class PostRepository {
       postDateTime: DateTime.now(),
     );
     await databaseManager.insertPost(post);
+  }
 
 
+  Future<List<Post>> getPosts(FeedMode feedMode, User feedUser) async {
+    /// [enum: 場合分け: 取得する投稿posts内容が異なる: if]
+    /// [この時点で場合分けされている: feedMode && feedUser]
+    if (feedMode == FeedMode.FROM_FEED) {
+      return databaseManager.getPostsMineAndFollowings(feedUser.userId);
+    } else {
+      return databaseManager.getPostsByUser(feedUser.userId);
+    }
+  }
+
+  Future<void> updatePost(Post updatePost) async {
+    return databaseManager.updatePost(updatePost);
   }
 
 

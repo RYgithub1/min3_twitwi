@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:min3_twitwi/common/confirm_dialog.dart';
 import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
+import 'package:min3_twitwi/view/common/confirm_dialog.dart';
 import 'package:min3_twitwi/view/post/component/post_caption_part.dart';
 import 'package:min3_twitwi/view/post/component/post_location_part.dart';
 import 'package:min3_twitwi/viewmodel/post_view_model.dart';

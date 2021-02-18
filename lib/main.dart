@@ -1,13 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:min3_twitwi/common/style.dart';
 import 'package:min3_twitwi/view/home_screen.dart';
 import 'package:min3_twitwi/view/login/login_screen.dart';
 import 'package:min3_twitwi/viewmodel/login_view_model.dart';
 import 'package:provider/provider.dart';
 import 'dinjection/providers.dart';
 import 'generated/l10n.dart';
+import 'view/common/style.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 
 
@@ -15,6 +16,8 @@ import 'generated/l10n.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  timeAgo.setLocaleMessages("ja", timeAgo.JaMessages());
 
   runApp(
     MultiProvider(
@@ -50,7 +53,7 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.orange[200]),
         primaryIconTheme: IconThemeData(color: Colors.orangeAccent),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: RegularFont
+        fontFamily: RegularFont,
       ),
 
       // home: HomeScreen(),

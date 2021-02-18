@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:min3_twitwi/common/button_with_icon.dart';
 import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
+import 'package:min3_twitwi/view/common/button_with_icon.dart';
 import 'package:min3_twitwi/view/post/screen/post_upload_screen.dart';
 
 
