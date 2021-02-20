@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:min3_twitwi/data/comment.dart';
+import 'package:min3_twitwi/data/like.dart';
 import 'package:min3_twitwi/data/location.dart';
 import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
@@ -76,9 +78,74 @@ class PostRepository {
     }
   }
 
+
   Future<void> updatePost(Post updatePost) async {
     return databaseManager.updatePost(updatePost);
   }
+
+
+  Future<void> postComment(Post post, User commentUser, String commentString) async {
+    final comment = Comment(
+      commentId: Uuid().v1(),
+      postId: post.postId,
+      commentUserId: commentUser.userId,
+      comment: commentString,
+      commentDateTime: DateTime.now(),
+    );
+    await databaseManager.postComment(comment);
+  }
+
+
+  Future<List<Comment>> getComment(String postId) async {
+    return databaseManager.getComment(postId);
+  }
+
+
+  Future<void> deleteComment(String deleteCommentId) async {
+    await databaseManager.deleteComment(deleteCommentId);
+  }
+
+
+
+
+  Future<void> likeIt(Post post, User currentUser) async {
+    /// [c/crud: LikeCLASSでの必要事項記入して渡す]
+    final like = Like(
+      likeId: Uuid().v1(),
+      postId: post.postId,
+      likeUserId: currentUser.userId,
+      likeDateTime: DateTime.now(),
+    );
+    await databaseManager.likeIt(like);
+  }
+
+  Future<void> unLikeIt(Post post, User currentUser) async {
+    /// [d/crud: 対象のpostとuser情報]
+    await databaseManager.unLikeIt(post, currentUser);
+  }
+
+
+  Future<LikeResult> getLikeResult(String postId, User currentUser) async {
+    /// [postに紐づくいいね全てを取得: リスト型]
+    final likes = await databaseManager.getLikes(postId);
+
+    /// [そのリスト内、自分がいいねしてたか]
+    var isLikedPost = false;
+    for (var like in likes) {
+      if (like.likeUserId == currentUser.userId) {
+        isLikedPost = true;
+        break;
+      }
+    }
+    return LikeResult(likes: likes, isLikedToThisPost: isLikedPost);
+  }
+
+
+
+  Future<void> deletePost(String postId, String imageStoragePath) async {
+    await databaseManager.deletePost(postId, imageStoragePath);
+  }
+
 
 
 

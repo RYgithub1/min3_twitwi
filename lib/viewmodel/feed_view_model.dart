@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:min3_twitwi/data/comment.dart';
+import 'package:min3_twitwi/data/like.dart';
 import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
 import 'package:min3_twitwi/enum/constant.dart';
@@ -62,6 +64,45 @@ class FeedViewModel extends ChangeNotifier {
     isProcessing = false;
     notifyListeners();
   }
+
+
+
+  Future<List<Comment>> getComment(String postId) async {
+    return await postRepository.getComment(postId);
+  }
+
+
+
+
+  Future<void> likeIt(Post post) async {
+    await postRepository.likeIt(post, currentUser);   /// [いいねした人のid欲しい: currentUser]
+    notifyListeners();
+  }
+
+  Future<void> unLikeIt(Post post) async {
+    await postRepository.unLikeIt(post, currentUser);
+    notifyListeners();
+  }
+
+  Future<LikeResult> getLikeResult(String postId) async {
+    /// [対象のpost欲しい: postId ,,, 自分がいいねしたか条件分岐: currentUser]
+    return await postRepository.getLikeResult(postId, currentUser);
+  }
+
+
+
+
+  Future<void> deletePost(Post post, FeedMode feedMode) async {
+    isProcessing = true;
+    notifyListeners();
+
+    await postRepository.deletePost(post.postId, post.imageStoragePath); /// [紐づくstorage画像も削除: imageStoragePath]
+    /// [update後に、表示データも新しく]
+    await getPosts(feedMode);
+    isProcessing = false;
+    notifyListeners();
+  }
+
 
 
 }

@@ -28,3 +28,7 @@ const numberOfCommentTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12
 const timeAgoTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12.0, color: Colors.grey);
 const commentNameTextStyle = TextStyle(fontFamily: BoldFont, fontSize: 16.0);
 const commentContentTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12.0);
+
+
+// Comment
+const commentInputTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 20.0);

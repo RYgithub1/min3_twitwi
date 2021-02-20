@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:min3_twitwi/data/comment.dart';
 import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
 import 'package:min3_twitwi/view/common/comment_rich_text.dart';
 import 'package:min3_twitwi/view/common/functions.dart';
 import 'package:min3_twitwi/view/common/style.dart';
+import 'package:min3_twitwi/view/feed/screen/comment_screen.dart';
+import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -17,6 +21,9 @@ class FeedPostCommentPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);  /// [listen:false]
+
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Column(
@@ -28,11 +35,26 @@ class FeedPostCommentPart extends StatelessWidget {
             text: post.caption,
           ),
           InkWell(
-            // splachColor: ,
-            onTap: null,
-            child: Text(
-              "0 ${S.of(context).comments}",
-              style: numberOfCommentTextStyle,
+            splashColor: Colors.cyan,
+            onTap: () => _openComentScreen(context, post, postUser),   /// [押したらCommentScreen開く]
+            // child: Text(
+            //   "0 ${S.of(context).comments}",
+            //   style: numberOfCommentTextStyle,
+            // ),
+            /// [無限ループ: FutureBuilder()]
+            child: FutureBuilder(
+              future: feedViewModel.getComment(post.postId) ,
+              builder: (context, AsyncSnapshot<List<Comment>> snapshot) {
+                if (snapshot.hasData && snapshot.data != null) {
+                  final comments = snapshot.data;
+                  return Text(
+                    comments.length.toString() + "  " + "${S.of(context).comments}",
+                    style: numberOfCommentTextStyle,
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
           ),
           Text(
@@ -44,4 +66,19 @@ class FeedPostCommentPart extends StatelessWidget {
       ),
     );
   }
+
+
+
+  _openComentScreen(BuildContext context, Post post, User postUser) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => CommentScreen(
+        post: post,
+        postUser: postUser,
+      ),
+    ));
+  }
+
 }
+
+
+

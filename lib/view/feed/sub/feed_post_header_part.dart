@@ -3,8 +3,11 @@ import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
 import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
+import 'package:min3_twitwi/view/common/confirm_dialog.dart';
 import 'package:min3_twitwi/view/common/user_card.dart';
 import 'package:min3_twitwi/view/feed/screen/feed_post_edit_screen.dart';
+import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 
@@ -78,14 +81,15 @@ class FeedPostHeaderPart extends StatelessWidget {
           ),
         ));
         break;
-      case PostMenu.DELETE:      
-        Navigator.push(context, MaterialPageRoute(
-          builder: (_) => FeedPostEditScreen(
-            postUser: postUser,
-            post: post,
-            feedMode: feedMode,
-          ),
-        ));
+      case PostMenu.DELETE:
+        showConfirmDialog(
+          context: context,
+          title: S.of(context).deletePost,
+          content: S.of(context).deletePostConfirm,
+          onConfirmed: (isConfirmed) {
+            if(isConfirmed) _deletePost(context, post);
+          },
+        );
         break;
       case PostMenu.SHARE:
         Share.share(
@@ -95,8 +99,13 @@ class FeedPostHeaderPart extends StatelessWidget {
         break;
       default:
     }
+  }
 
 
+
+  void _deletePost(BuildContext context, Post post) async {
+    final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);
+    await feedViewModel.deletePost(post, feedMode);  /// [Feed画面開くは経由2パターン: feedMode]
   }
 
 
