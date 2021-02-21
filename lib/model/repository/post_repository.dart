@@ -71,9 +71,9 @@ class PostRepository {
   Future<List<Post>> getPosts(FeedMode feedMode, User feedUser) async {
     /// [enum: 場合分け: 取得する投稿posts内容が異なる: if]
     /// [この時点で場合分けされている: feedMode && feedUser]
-    if (feedMode == FeedMode.FROM_FEED) {
+    if (feedMode == FeedMode.FROM_FEED) {   /// [自分がフォロー中のを取得]
       return databaseManager.getPostsMineAndFollowings(feedUser.userId);
-    } else {
+    } else {                                /// [プロフィール画面に表示ユーザのを取得]
       return databaseManager.getPostsByUser(feedUser.userId);
     }
   }

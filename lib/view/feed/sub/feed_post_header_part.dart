@@ -6,6 +6,7 @@ import 'package:min3_twitwi/generated/l10n.dart';
 import 'package:min3_twitwi/view/common/confirm_dialog.dart';
 import 'package:min3_twitwi/view/common/user_card.dart';
 import 'package:min3_twitwi/view/feed/screen/feed_post_edit_screen.dart';
+import 'package:min3_twitwi/view/profile/screen/profile_screen.dart';
 import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -30,7 +31,7 @@ class FeedPostHeaderPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UserCard(
-        onTap: null,
+        onTap: () => _openProfile(context, postUser),
         photoUrl: postUser.photoUrl,   /// [Need user情報: postUser持ってくる]
         title: postUser.inAppUserName,
         subtitle: post.locationString, /// [location情報表示させたい: postに紐: post持ってくる]
@@ -106,6 +107,20 @@ class FeedPostHeaderPart extends StatelessWidget {
   void _deletePost(BuildContext context, Post post) async {
     final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);
     await feedViewModel.deletePost(post, feedMode);  /// [Feed画面開くは経由2パターン: feedMode]
+  }
+
+
+
+  _openProfile(BuildContext context, User postUser) {
+    final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => ProfileScreen(
+        profileMode: postUser.userId == feedViewModel.currentUser.userId
+            ? ProfileMode.MYSELF
+            : ProfileMode.OTHER,
+        selectedUser: postUser,
+      ),
+    ));
   }
 
 

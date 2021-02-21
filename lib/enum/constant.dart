@@ -24,3 +24,11 @@ enum PostMenu {
   DELETE,
   SHARE,
 }
+
+
+
+/// [profile] :
+enum ProfileMode {
+  MYSELF,
+  OTHER,
+}

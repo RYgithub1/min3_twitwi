@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
 import 'feed/page/feed_page.dart';
 import 'search/page/search_page.dart';
@@ -11,7 +12,7 @@ import 'profile/page/profile_page.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
+  // HomeScreen({Key key}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -30,7 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
       SearchPage(),
       PostPage(),
       ActivityPage(),
-      ProfilePage(),
+      ProfilePage(
+        profileMode: ProfileMode.MYSELF,
+      ),
     ];
   }
 

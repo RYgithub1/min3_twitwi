@@ -97,9 +97,21 @@ class DatabaseManager {
 
 
 
-  Future<List<Post>> getPostsByUser(String userId) {
-    return null;
-
+  Future<List<Post>> getPostsByUser(String userId) async {
+    final query = await _firestoreDb.collection("posts")
+                                    .get();
+    if (query.docs.length == 0) return List();
+    var results = List<Post>();
+    await _firestoreDb.collection("posts")
+                      .where("userId", isEqualTo: userId)
+                      .orderBy("postDateTime", descending: true)
+                      .get()
+                      .then((value) {
+                        value.docs.forEach((element) {
+                          results.add(Post.fromMap(element.data()));
+                        });
+                      });
+    return results;
   }
 
 
@@ -120,7 +132,7 @@ class DatabaseManager {
 
   /// [DB更新]
   Future<void> updatePost(Post updatePost) async {
-    final reference = await _firestoreDb.collection("posts").doc(updatePost.postId);
+    final reference = _firestoreDb.collection("posts").doc(updatePost.postId);
     await reference.update(updatePost.toMap());
   }
 
