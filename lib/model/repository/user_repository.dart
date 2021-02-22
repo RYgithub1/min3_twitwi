@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:min3_twitwi/data/user.dart';
 import 'package:min3_twitwi/model/database/database_manager.dart';
+import 'package:uuid/uuid.dart';
 
 
 
@@ -89,8 +92,70 @@ class UserRepository {
     );
   }
 
+
   Future<User> getUserById(String userId) async {
     return await databaseManager.getUserInfoFromDbById(userId);
+  }
+
+
+  Future<void> signOut() async {
+    /// [googleとFirebaseAuthとログイン時作成currentUserにデータ残っている]
+    await _googleSignIn.signOut();
+    await _auth.signOut();
+    currentUser =null;
+  }
+
+
+
+  Future<int> getNumberOfFollower(User profileUser) async {
+    /// [List取得,,,List.lengthをintで返す]
+    // return (  await databaseManager.getNumberOfFollowerUserIds(profileUser.userId)  ).length;
+    return (  await databaseManager.getFollowerUserIds(profileUser.userId)  ).length;
+  }
+  Future<int> getNumberOfFollowing(User profileUser) async {
+    /// [List取得,,,List.lengthをintで返す]
+    // return (  await databaseManager.getNumberOfFollowingUserIds(profileUser.userId)  ).length;
+    /// [流用]
+    return (  await databaseManager.getFollowingUserIds(profileUser.userId)  ).length;
+  }
+
+
+
+  Future<void> updateProfile(
+    String photoUrlUpdated,
+    bool isImageFromFile,
+    String nameUpdated,
+    String bioUpdated,
+    User profileUser,
+  ) async {
+
+    var updatePhotoUrl;   /// [共通で使うからココ]
+    /// [---------- 画像のphotoアップデートは２段階必要 ----------]
+    /// [(1)まずファイルをStorageに保存して、(2)StorageからダウンロードURL取得]
+    if (isImageFromFile) {
+      final updatePhotoFile = File(photoUrlUpdated);
+      final storagePath = Uuid().v1();
+      updatePhotoUrl = await databaseManager.uploadImageToStorage(updatePhotoFile, storagePath);   ///[(1)Storageへの保存]
+    } ///         [HERE: vsError:]
+    /// } else {  [HERE: vsError: これだとどちらかしか処理されない -> 「ifなら実行」かつ「ifNot必ず実行」]
+
+      final userBeforeUpdate = await databaseManager.getUserInfoFromDbById(profileUser.userId);   /// [BEFOREの設定]
+      /// [部分修正して全体をパス: copyWith()]
+      final updateUser = userBeforeUpdate.copyWith(
+        /// [copyWith: NAME/BIO/PHOTOのみ部分修正]
+        inAppUserName: nameUpdated,
+        photoUrl: isImageFromFile   /// [写真更新有無: BEFOREのままか新規か]
+            ? updatePhotoUrl
+            : userBeforeUpdate.photoUrl,
+        bio: bioUpdated,
+      );
+      await databaseManager.updateProfile(updateUser);   /// [updateUser: 丸ごと格納してパス]
+    /// }          [HERE: vsError]
+  }
+
+
+  Future<void> getCurrentUserById(String userId) async {
+    currentUser = await databaseManager.getUserInfoFromDbById(userId);   /// [currentUserの更新]
   }
 
 

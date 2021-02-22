@@ -47,7 +47,7 @@ class FeedPostLikePart extends StatelessWidget {
                           onPressed: () => _unLikeIt(context),
                         )
                         : IconButton(
-                          icon: FaIcon(FontAwesomeIcons.solidHeart),
+                          icon: FaIcon(FontAwesomeIcons.heart),
                           onPressed: () => _likeIt(context),
                         ),
 

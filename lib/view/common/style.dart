@@ -32,3 +32,11 @@ const commentContentTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12.
 
 // Comment
 const commentInputTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 20.0);
+
+
+// Profile
+const profileRecordScoreTextStyle = TextStyle(fontFamily: BoldFont, fontSize: 20.0);
+const profileRecordTextTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 16.0);
+const changeProfilePhotoTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 18.0, color: Colors.orangeAccent);
+const editProfileTitleTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 14.0);
+const profileBioTitleTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12.0);

@@ -58,9 +58,12 @@ class DatabaseManager {
     final storageRef = FirebaseStorage.instance.ref().child(storageId);
     final uploadTask = storageRef.putFile(imageFile);
     return await uploadTask.then(  (TaskSnapshot snapshot) => snapshot.ref.getDownloadURL()  );
-
-
+    // return uploadTask.then(  (TaskSnapshot snapshot) => snapshot.ref.getDownloadURL()  );
   }
+
+
+
+
 
   Future<void> insertPost(Post post) async {
     await _firestoreDb.collection("posts").doc(post.postId)
@@ -120,7 +123,7 @@ class DatabaseManager {
     final query = await _firestoreDb.collection("users").doc(userId)
                                     .collection("followings")
                                     .get();
-    if (query.docs.length > 0 ) return List();
+    if (query.docs.length == 0 ) return List();
     /// [データ有: follow中userのidを各々取得]
     var userIds = List<String>();
     query.docs.forEach((element) {
@@ -234,6 +237,32 @@ class DatabaseManager {
     storageRef.delete();
   }
 
+
+
+
+  // Future<List<String>> getNumberOfFollowerUserIds(String userId) async {
+  Future<List<String>> getFollowerUserIds(String userId) async {
+    /// [いつものDBにデータあるか判定,,,Excert]
+    final query = await _firestoreDb.collection("users").doc(userId)
+                                    .collection("followers")
+                                    .get();
+    if (query.docs.length == 0) return List();
+    var userIds = List<String>();
+    /// [array.docs.forEach]
+    query.docs.forEach((element) {
+      userIds.add(element.data()["userId"]);
+    });
+    return userIds;
+  }
+
+
+
+  Future<void> updateProfile(User updateUser) async {
+    /// [updateへ、まず対象のテーブル/レコード -> reference取得]
+    final reference = _firestoreDb.collection("users").doc(updateUser.userId);
+       /// [updateUser: 丸ごと格納してパス -> toMap()してUPDATE]
+    await reference.update(updateUser.toMap());
+  }
 
 
 

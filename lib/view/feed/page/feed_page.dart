@@ -23,7 +23,10 @@ class FeedPage extends StatelessWidget {
           style: TextStyle(fontFamily: TitleFont),
         ),
       ),
-      body: FeedSubPage(feedMode: FeedMode.FROM_FEED),
+      body: FeedSubPage(
+        feedMode: FeedMode.FROM_FEED,
+        index: 0,
+      ),
     );
   }
 

@@ -41,10 +41,61 @@ class ProfileViewModel extends ChangeNotifier {
     posts = await postRepository.getPosts(FeedMode.FROM_PROFILE, profileUser);
     isProcessing =false;
     notifyListeners();
-
-
   }
 
+
+
+  Future<void> signOut() async {
+    await userRepository.signOut();
+    notifyListeners();
+  }
+
+
+
+  /// [profile: each numbers]
+  Future<int> getNumberOfPost() async {
+    return (  await postRepository.getPosts(FeedMode.FROM_PROFILE, profileUser)  ).length;
+  }
+  Future<int> getNumberOfFollower() async {
+    return await userRepository.getNumberOfFollower(profileUser);
+  }
+  Future<int> getNumberOfFollowing() async {
+    return await userRepository.getNumberOfFollowing(profileUser);
+  }
+
+
+
+  Future<String> pickProfileImage() async {
+    return (  await postRepository.pickImage(UploadType.GALLERY)  ).path;
+  }
+
+
+
+
+  Future<void> updateProfile(
+    String photoUrlUpdated,
+    bool isImageFromFile,
+    String nameUpdated,
+    String bioUpdated,
+  ) async {
+    isProcessing = true;
+    notifyListeners();
+
+    await userRepository.updateProfile(
+      photoUrlUpdated,
+      isImageFromFile,
+      nameUpdated,
+      bioUpdated,
+      profileUser,
+    );
+
+    /// [更新の反映: currentUserにデータ持っている]
+    /// [UPDATE後ユーザデータの再取得 -> staticへ保存]
+    await userRepository.getCurrentUserById(profileUser.userId);
+    profileUser = currentUser;
+    isProcessing = false;
+    notifyListeners();
+  }
 
 
 }

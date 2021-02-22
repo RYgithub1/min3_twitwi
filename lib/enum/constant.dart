@@ -26,9 +26,14 @@ enum PostMenu {
 }
 
 
-
-/// [profile] :
+/// [profile]
 enum ProfileMode {
   MYSELF,
   OTHER,
+}
+
+
+enum ProfileSettingMenu {
+  THEME_CHANGE,
+  SIGN_OUT,
 }

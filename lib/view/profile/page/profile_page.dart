@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:min3_twitwi/data/user.dart';
 import 'package:min3_twitwi/enum/constant.dart';
+import 'package:min3_twitwi/view/profile/component/profile_detail_part.dart';
+import 'package:min3_twitwi/view/profile/component/profile_post_grid_part.dart';
+import 'package:min3_twitwi/view/profile/component/profile_setting_part.dart';
 import 'package:min3_twitwi/viewmodel/profile_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +29,35 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       body: Consumer<ProfileViewModel>(
         builder: (context, viewModel, child) {
-          print("comm210: ProfilePage: ${viewModel.posts}");
-          return Center(
-            child: Text("ProfilePage"),
+          print("comm270: ProfilePage: ${viewModel.posts}");
+          final profileUser = viewModel.profileUser;
+          return CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                title: Text(profileUser.inAppUserName),
+                pinned: true,
+                floating: true,
+
+                actions: <Widget>[
+                  ProfileSettingPart(
+                    mode: profileMode,   /// [mode場合分け渡す]
+                  ),
+                ],
+                expandedHeight: 280.0,
+
+                flexibleSpace: FlexibleSpaceBar(
+                  background: ProfileDetailPart(
+                    mode: profileMode,   /// [mode場合分け渡す]
+                  ),
+                ),
+              ),
+
+
+              ProfilePostGridPart(
+                // posts: profileViewModel.posts,
+                posts: viewModel.posts,
+              ),
+            ],
           );
         },
       ),
