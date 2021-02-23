@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
 import 'package:min3_twitwi/data/comment.dart';
 import 'package:min3_twitwi/data/like.dart';
 import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
+import 'package:min3_twitwi/model/repository/user_repository.dart';
 
 
 
@@ -263,6 +265,73 @@ class DatabaseManager {
        /// [updateUser: 丸ごと格納してパス -> toMap()してUPDATE]
     await reference.update(updateUser.toMap());
   }
+
+
+
+  /// [duplicate: query <-> queryStringへ変更]
+  Future<List<User>> searchUser(String queryString) async {
+    final query = await _firestoreDb.collection("users")
+                                    .orderBy("inAppUserName")
+                                    .startAt([queryString])
+                                    .endAt([queryString + "\uf8ff"]) /// [startAt/endAtでワイルドカード検索]
+                                    .get();
+
+    if (query.docs.length == 0) return List();
+
+    var soughtUsers = List<User>();
+    query.docs.forEach((element) {
+      final selectedUsers = User.fromMap(element.data());
+      if (selectedUsers.userId != UserRepository.currentUser.userId) {
+        soughtUsers.add(selectedUsers);
+      }
+    });
+    return soughtUsers;
+  }
+
+
+
+  Future<void> follow(User profileUser, User currentUser) async {
+    /// [currentUserにとってのfollowings]
+    await _firestoreDb.collection("users").doc(currentUser.userId)
+                      .collection("followings").doc(profileUser.userId)
+                      .set({"userId": profileUser.userId});   /// [map: {}]
+    /// [profileUserにとってのfollowers]
+    await _firestoreDb.collection("users").doc(profileUser.userId)
+                      .collection("followers").doc(currentUser.userId)
+                      .set({"userId": currentUser.userId});   /// [map: {}]
+  }
+
+  Future<void> unFollow(User profileUser, User currentUser) async {
+    /// [currentUserでのfollowingsからの削除]
+    await _firestoreDb.collection("users").doc(currentUser.userId)
+                      .collection("followings").doc(profileUser.userId)
+                      .delete();
+    /// [profileUserでのfollowersからの削除]
+    await _firestoreDb.collection("users").doc(profileUser.userId)
+                      .collection("followers").doc(profileUser.userId)
+                      .delete();
+  }
+
+
+
+
+  Future<bool> checkIsFollowing(User profileUser, User currentUser) async {
+    final query = await _firestoreDb.collection("users").doc(currentUser.userId)
+                                    .collection("followings")
+                                    .get();
+    if (query.docs.length == 0) return false;
+
+    final checkQuery = await _firestoreDb.collection("users").doc(currentUser.userId)
+                                          .collection("followings")
+                                          .where("userId", isEqualTo: profileUser.userId)
+                                          .get();
+    if (checkQuery.docs.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
 
 

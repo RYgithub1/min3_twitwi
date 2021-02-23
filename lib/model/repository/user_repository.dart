@@ -160,5 +160,25 @@ class UserRepository {
 
 
 
+  Future<List<User>> searchUser(String query) async {
+    return await databaseManager.searchUser(query);
+  }
+
+
+
+
+  Future<void> follow(User profileUser) async {
+    await databaseManager.follow(profileUser, currentUser); /// [DBで特定するために自分と対象のUser情報渡す]
+  }
+  Future<void> unFollow(User profileUser) async {
+    await databaseManager.unFollow(profileUser, currentUser);
+  }
+  Future<bool> checkIsFollowing(User profileUser) async {
+    return await databaseManager.checkIsFollowing(profileUser, currentUser);
+  }
+
+
+
+
 
 }

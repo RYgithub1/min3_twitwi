@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
     /// [--- profile表示: 3経由: BNB, Search, FeedTap ---]
     /// [profileユーザを特定する]
     final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
-    profileViewModel.setProfileUser(profileMode, selectedUser);
+    profileViewModel.setProfileUser(profileMode, selectedUser);   /// [セットする]
     /// [Future逃がす]
     Future(  () => profileViewModel.getPost()  );
 
@@ -34,7 +34,10 @@ class ProfilePage extends StatelessWidget {
           return CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
-                title: Text(profileUser.inAppUserName),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: Text(profileUser.inAppUserName),
+                ),
                 pinned: true,
                 floating: true,
 

@@ -40,3 +40,7 @@ const profileRecordTextTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 
 const changeProfilePhotoTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 18.0, color: Colors.orangeAccent);
 const editProfileTitleTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 14.0);
 const profileBioTitleTextStyle = TextStyle(fontFamily: RegularFont, fontSize: 12.0);
+
+
+// Search
+const searchPageAppbatTitleTextStyle = TextStyle(fontFamily: RegularFont, color: Colors.grey);

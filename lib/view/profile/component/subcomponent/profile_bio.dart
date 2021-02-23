@@ -42,19 +42,45 @@ class ProfileBio extends StatelessWidget {
 
 
 
+
   _button(BuildContext context, User profileUser) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    final isFollowing = profileViewModel.isFollowingProfileUser;   /// [bool型: isFollowingフォロー中か否か]
+
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       child: mode == ProfileMode.MYSELF
           ? Text(S.of(context).editProfile)
-          : Text("ssss"),
-      onPressed: () => _openEditProfileScreen(context),
+          /// [follow中か否か -> V変更]
+          : isFollowing
+              ? Text(S.of(context).unFollow)
+              : Text(S.of(context).follow),
+      // onPressed: () => _openEditProfileScreen(context),
+      onPressed: () {
+        /// [follow中か否か -> 処理変更]
+        mode == ProfileMode.MYSELF
+            ? _openEditProfileScreen(context)
+            : isFollowing
+                ? _unFollow(context)
+                : _follow(context);
+      },
     );
   }
   _openEditProfileScreen(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(
       builder: (_) => EditProfileScreen(),
     ));
+  }
+
+
+
+  _follow(BuildContext context) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    profileViewModel.follow();
+  }
+  _unFollow(BuildContext context) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    profileViewModel.unFollow();
   }
 
 
