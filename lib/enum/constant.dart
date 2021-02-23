@@ -37,3 +37,11 @@ enum ProfileSettingMenu {
   THEME_CHANGE,
   SIGN_OUT,
 }
+
+
+/// [relation: 各々mode条件,,postId, user情報,,,]
+enum RelationMode {
+  LIKE,
+  FOLLOWING,
+  FOLLOWED,
+}

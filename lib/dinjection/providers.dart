@@ -7,6 +7,7 @@ import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
 import 'package:min3_twitwi/viewmodel/login_view_model.dart';
 import 'package:min3_twitwi/viewmodel/post_view_model.dart';
 import 'package:min3_twitwi/viewmodel/profile_view_model.dart';
+import 'package:min3_twitwi/viewmodel/relation_view_model.dart';
 import 'package:min3_twitwi/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -82,6 +83,11 @@ List<SingleChildWidget> viewModels = [
   ),
   ChangeNotifierProvider<SearchViewModel>(
     create: (context) => SearchViewModel(
+      userRepository: Provider.of<UserRepository>(context, listen: false),
+    ),
+  ),
+  ChangeNotifierProvider<RelationViewModel>(
+    create: (context) => RelationViewModel(
       userRepository: Provider.of<UserRepository>(context, listen: false),
     ),
   ),

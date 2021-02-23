@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:min3_twitwi/data/user.dart';
+import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/model/database/database_manager.dart';
 import 'package:uuid/uuid.dart';
 
@@ -179,6 +180,26 @@ class UserRepository {
 
 
 
+  /// [FutureList<User>Return, Argu]
+  Future<List<User>> getRelatedUser(RelationMode relationMode, String eachId) async {
+    var results = List<User>();
 
+    switch (relationMode) {
+      case RelationMode.LIKE:
+        final postId = eachId;
+        results = await databaseManager.getRelatedUserLike(postId);
+        break;
+      case RelationMode.FOLLOWED:
+        final profileUserId = eachId;
+        results = await databaseManager.getRelatedUserFollower(profileUserId);
+        break;
+      case RelationMode.FOLLOWING:
+        final profileUserId = eachId;
+        results = await databaseManager.getRelatedUserFollowing(profileUserId);
+        break;
+      default:
+    }
 
+    return results;
+  }
 }

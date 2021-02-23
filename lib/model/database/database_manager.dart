@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:http/http.dart';
 import 'package:min3_twitwi/data/comment.dart';
 import 'package:min3_twitwi/data/like.dart';
 import 'package:min3_twitwi/data/post.dart';
@@ -332,6 +331,51 @@ class DatabaseManager {
     }
   }
 
+
+
+
+  Future<List<User>> getRelatedUserLike(String postId) async {
+    final query = await _firestoreDb.collection("likes")
+                                    .where("postId", isEqualTo: postId)
+                                    .get();
+    if (query.docs.length == 0) return List();
+    var userIds = List<String>();
+    query.docs.forEach((element) {
+      userIds.add(element.data()["likeUserId"]);
+    });
+
+    /// [上のuserIdのリスト: likeUserId経由、userId取得]
+    var likeUsers = List<User>();
+    /// [Loop全体をawaitしたい: Future.forEach()]
+    await Future.forEach(userIds, (userId) async {
+      final user = await getUserInfoFromDbById(userId);
+      likeUsers.add(user);
+    });
+    return likeUsers;
+  }
+
+
+  Future<List<User>> getRelatedUserFollower(String profileUserId) async {
+    final followerUserIds = await getFollowerUserIds(profileUserId);
+    var followerUsers = List<User>();
+    /// [Loop全体をawaitしたい: Future.forEach()]
+    await Future.forEach(followerUserIds, (followerUserId) async {
+      final user = await getUserInfoFromDbById(followerUserId);
+      followerUsers.add(user);
+    });
+    return followerUsers;
+  }
+
+  Future<List<User>> getRelatedUserFollowing(String profileUserId) async {
+    final followingUserIds = await getFollowingUserIds(profileUserId);
+    var followingUsers = List<User>();
+    /// [Loop全体をawaitしたい: Future.forEach()]
+    await Future.forEach(followingUserIds, (followingUserId) async {
+      final user = await getUserInfoFromDbById(followingUserId);
+      followingUsers.add(user);
+    });
+    return followingUsers;
+  }
 
 
 

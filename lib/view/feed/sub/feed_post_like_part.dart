@@ -3,9 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:min3_twitwi/data/like.dart';
 import 'package:min3_twitwi/data/post.dart';
 import 'package:min3_twitwi/data/user.dart';
+import 'package:min3_twitwi/enum/constant.dart';
 import 'package:min3_twitwi/generated/l10n.dart';
 import 'package:min3_twitwi/view/common/style.dart';
 import 'package:min3_twitwi/view/feed/screen/comment_screen.dart';
+import 'package:min3_twitwi/view/relation/screen/relation_screen.dart';
 import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -58,9 +60,17 @@ class FeedPostLikePart extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  likeResult.likes.length.toString() + "  " + S.of(context).likes,
-                  style: numberOfLikeTextStyle,
+                // Text(
+                //   likeResult.likes.length.toString() + "  " + S.of(context).likes,
+                //   style: numberOfLikeTextStyle,
+                // ),
+                /// [押下: Relation]
+                GestureDetector(
+                  onTap: () => _checkLikeUser(context),
+                  child: Text(
+                    likeResult.likes.length.toString() + "  " + S.of(context).likes,
+                    style: numberOfLikeTextStyle,
+                  ),
                 ),
               ],
             );
@@ -85,14 +95,27 @@ class FeedPostLikePart extends StatelessWidget {
 
 
 
+
   _likeIt(BuildContext context) async {
     final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);
     await feedViewModel.likeIt(post);
   }
-
   _unLikeIt(BuildContext context) async {
     final feedViewModel = Provider.of<FeedViewModel>(context, listen: false);
     await feedViewModel.unLikeIt(post);
+  }
+
+
+
+
+  _checkLikeUser(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => RelationScreen(
+        /// [どのmodeからか,,各々のid]
+        relationMode: RelationMode.LIKE,
+        eachId: post.postId,
+      ),
+    ));
   }
 
 
