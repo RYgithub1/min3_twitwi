@@ -8,8 +8,8 @@ import 'package:min3_twitwi/view/profile/component/subcomponent/profile_record.d
 
 
 class ProfileDetailPart extends StatelessWidget {
-  final ProfileMode mode;
-  ProfileDetailPart({@required this.mode});
+  final ProfileMode profileMode;
+  ProfileDetailPart({@required this.profileMode});
 
 
   @override
@@ -34,7 +34,7 @@ class ProfileDetailPart extends StatelessWidget {
           ),
           SizedBox(height: 12),
           ProfileBio(
-            mode: mode,
+            mode: profileMode,
           ),
         ],
       ),

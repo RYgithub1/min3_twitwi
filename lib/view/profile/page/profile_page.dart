@@ -43,14 +43,14 @@ class ProfilePage extends StatelessWidget {
 
                 actions: <Widget>[
                   ProfileSettingPart(
-                    mode: profileMode,   /// [mode場合分け渡す]
+                    profileMode: profileMode,   /// [mode場合分け渡す]
                   ),
                 ],
                 expandedHeight: 280.0,
 
                 flexibleSpace: FlexibleSpaceBar(
                   background: ProfileDetailPart(
-                    mode: profileMode,   /// [mode場合分け渡す]
+                    profileMode: profileMode,   /// [mode場合分け渡す]
                   ),
                 ),
               ),

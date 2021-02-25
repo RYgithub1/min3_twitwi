@@ -1,13 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:min3_twitwi/model/repository/theme_change_repository.dart';
 import 'package:min3_twitwi/view/home_screen.dart';
 import 'package:min3_twitwi/view/login/login_screen.dart';
 import 'package:min3_twitwi/viewmodel/login_view_model.dart';
+import 'package:min3_twitwi/viewmodel/theme_change_view_model.dart';
 import 'package:provider/provider.dart';
 import 'dinjection/providers.dart';
 import 'generated/l10n.dart';
-import 'view/common/style.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 
 
@@ -16,6 +17,11 @@ import 'package:timeago/timeago.dart' as timeAgo;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+
+  final themeChangeRepository = ThemeChangeRepository();
+  await themeChangeRepository.getIsDarkMode();
+
 
   timeAgo.setLocaleMessages("ja", timeAgo.JaMessages());
 
@@ -35,6 +41,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+    /// [theme動的変更: V変更ある: listen: true]
+    final themeChangeViewModel = Provider.of<ThemeChangeViewModel>(context);
+
 
     return MaterialApp(
       localizationsDelegates: [
@@ -47,14 +56,11 @@ class MyApp extends StatelessWidget {
 
       debugShowCheckedModeBanner: false,
       title: 'TWITWI',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        buttonColor: Colors.orange,
-        iconTheme: IconThemeData(color: Colors.orange[200]),
-        primaryIconTheme: IconThemeData(color: Colors.orangeAccent),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: RegularFont,
-      ),
+
+
+      /// [theme動的変更]
+      theme: themeChangeViewModel.selectedTheme,
+
 
       // home: HomeScreen(),
       /// [ログイン認証はUserテーブルにcurrentUserいるか否か: FutureBuilder: 非同期処理まってWidget生成]

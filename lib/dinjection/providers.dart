@@ -1,6 +1,7 @@
 import 'package:min3_twitwi/model/database/database_manager.dart';
 import 'package:min3_twitwi/model/location/location_manager.dart';
 import 'package:min3_twitwi/model/repository/post_repository.dart';
+import 'package:min3_twitwi/model/repository/theme_change_repository.dart';
 import 'package:min3_twitwi/model/repository/user_repository.dart';
 import 'package:min3_twitwi/viewmodel/comment_view_model.dart';
 import 'package:min3_twitwi/viewmodel/feed_view_model.dart';
@@ -9,6 +10,7 @@ import 'package:min3_twitwi/viewmodel/post_view_model.dart';
 import 'package:min3_twitwi/viewmodel/profile_view_model.dart';
 import 'package:min3_twitwi/viewmodel/relation_view_model.dart';
 import 'package:min3_twitwi/viewmodel/search_view_model.dart';
+import 'package:min3_twitwi/viewmodel/theme_change_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -30,6 +32,11 @@ List<SingleChildWidget> independentModels = [
   Provider<LocationManager>(
     create: (_) => LocationManager(),
   ),
+  //// [ThemeChangeRepository: Rだが誰にも依存していない(DBやLocation呼び込まない)]
+  Provider<ThemeChangeRepository>(
+    create: (_) => ThemeChangeRepository(),
+  ),
+
 
 ];
 
@@ -91,5 +98,12 @@ List<SingleChildWidget> viewModels = [
       userRepository: Provider.of<UserRepository>(context, listen: false),
     ),
   ),
+  ChangeNotifierProvider<ThemeChangeViewModel>(
+    create: (context) => ThemeChangeViewModel(
+      themeChangeRepository: Provider.of<ThemeChangeRepository>(context, listen: false),
+    ),
+  ),
 
 ];
+
+

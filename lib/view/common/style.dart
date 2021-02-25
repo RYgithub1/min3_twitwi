@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 
 
 
+/// [Theme]
+final darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  buttonColor: Colors.orange,
+  iconTheme: IconThemeData(color: Colors.orange[200]),
+  primaryIconTheme: IconThemeData(color: Colors.orangeAccent),
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  fontFamily: RegularFont,
+);
+final lightTheme = ThemeData(
+  brightness: Brightness.light,
+  buttonColor: Colors.lightGreen[100],
+  iconTheme: IconThemeData(color: Colors.greenAccent),
+  primaryIconTheme: IconThemeData(color: Colors.green),
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  fontFamily: RegularFont,
+
+  primaryColor: Colors.greenAccent[100],   /// [baseColor = primary]
+);
+
+
+
 
 /// [Font]
 const TitleFont = "Billabong";
